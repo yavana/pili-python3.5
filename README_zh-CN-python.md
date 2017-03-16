@@ -1,99 +1,104 @@
-# Pili Streaming Cloud server-side library for Python
+# PILI直播 Python服务端SDK 使用指南
 
-## Features
+## 功能列表
 
-- Stream Create,Get,List
-    - [x] hub.create_stream()
-    - [x] hub.get_stream()
-    - [x] hub.list_streams()
-- Stream operations else
-    - [x] stream.to_json()
-    - [x] stream.update()
-    - [x] stream.disable()
-    - [x] stream.enable()
-    - [x] stream.rtmp_publish_url()
-    - [x] stream.rtmp_live_urls()
-    - [x] stream.hls_live_urls()
-    - [x] stream.http_flv_live_urls()
-    - [x] stream.status()
-    - [x] stream.segments()
-    - [x] stream.hls_playback_urls()
-    - [x] stream.snapshot()
-    - [x] stream.save_as()
-    - [x] stream.delete()
+- 直播流的创建、获取和列举
+    - [x] hub.createStream()  // 创建流
+    - [x] hub.getStream()  // 获取流
+    - [x] hub.listStreams()  // 列举流
+- 直播流的其他功能
+    - [x] stream.toJsonString()  // 流信息转为json
+    - [x] stream.update()      // 更新流
+    - [x] stream.disable()      // 禁用流
+    - [x] stream.enable()    // 启用流
+    - [x] stream.rtmpPublishUrl()   // 生成推流地址
+    - [x] stream.rtmpLiveUrls()    // 生成rtmp播放地址
+    - [x] stream.hlsLiveUrls()   // 生成hls播放地址
+    - [x] stream.httpFlvLiveUrls()   // 生成flv播放地址
+    - [x] stream.status()     // 获取流状态
+    - [x] stream.segments()      // 获取流片段
+    - [x] stream.hlsPlaybackUrls()  // 生成hls回看地址
+    - [x] stream.saveAs()        // 流另存为文件
+    - [x] stream.snapshot()      // 获取快照
+    - [x] stream.delete()    // 删除流
 
 
-## Contents
+## 目录
 
-- [Installation](#installation)
-- [Usage](#usage)
-    - [Configuration](#configuration)
+- [安装](#installation)
+- [用法](#usage)
+    - [配置](#configuration)
     - [Hub](#hub)
-        - [Instantiate a Pili Hub object](#instantiate-a-pili-hub-object)
-        - [Create a new Stream](#create-a-new-stream)
-        - [Get a Stream](#get-a-stream)
-        - [List Streams](#List-streams)
-    - [Stream](#stream)
-        - [To JSON string](#to-json-string)
-        - [Update a Stream](#update-a-stream)
-        - [Disable a Stream](#disable-a-stream)
-        - [Enable a Stream](#enable-a-stream)
-        - [Generate RTMP publish URL](#generate-rtmp-publish-url)
-        - [Generate RTMP live play URLs](#generate-rtmp-live-play-urls)
-        - [Generate HLS live play URLs](generate-hls-live-play-urls)
-        - [Generate Http-Flv live play URLs](generate-http-flv-live-play-urls)
-        - [Get Stream status](#get-stream-status)
-        - [Get Stream segments](#get-stream-segments)
-        - [Generate HLS playback URLs](generate-hls-playback-urls)
-        - [Save Stream as a file](#save-stream-as-a-file)
-        - [Snapshot Stream](#snapshot-stream)
-        - [Delete a Stream](#delete-a-stream)
+        - [实例化hub对象](#instantiate-a-pili-hub-object)
+        - [创建流](#create-a-new-stream)
+        - [获取流](#get-an-exist-stream)
+        - [列举流](#list-streams)
+    - [直播流](#stream)
+        - [流信息转为json](#to-json-string)
+        - [更新流](#update-a-stream)
+        - [禁用流](#disable-a-stream)
+        - [启用流](#enable-a-stream)
+        - [生成推流地址](#generate-rtmp-publish-url)
+        - [生成rtmp播放地址](#generate-rtmp-live-play-urls)
+        - [生成hls播放地址](#generate-hls-play-urls)
+        - [生成flv播放地址](#generate-http-flv-live-play-urls)
+        - [获取流状态](#get-stream-status)
+        - [获取流片段](#get-stream-segments)
+        - [生成hls回看地址](#generate-hls-playback-urls)
+        - [流另存为文件](#save-stream-as-a-file)
+        - [获取快照](#snapshot-stream)
+        - [删除流](#delete-a-stream)
 - [History](#history)
 
 
-## Installation
+<a id="installation"></a>
+## 安装
 
 ```shell
 pip install pili
-# Note: The interface has changed after version 1.2.
-#       If you need deprecated API, use pip install -v pili==0.1.0.
+# 提示: 1.2版本以后的接口有变化
+#       若需要使用旧版API, 使用 pip install -v pili==0.1.0.
 ```
 
-## Usage:
+<a id="usage"></a>
+## 用法:
 
-### Configuration
+<a id="configuration"></a>
+#### 配置
 
 ```python
 from pili import *
 
-access_key = 'qiniu_access_key'
+access_key = 'qiniu_access_key' 
 secret_key = 'qiniu_secret_key'
 
 hub_name   = 'pili_hub_name' # The Hub must be exists before use
 
-# Change API host as necessary
-#
-# pili.qiniuapi.com as default
-# pili-lte.qiniuapi.com is the latest RC version
-#
-# conf.API_HOST = 'pili.qiniuapi.com' # default
+# 如有需要可以更改API host
+# 
+# 默认为 pili.qiniuapi.com
+# pili-lte.qiniuapi.com 为最近更新版本
+# 
+# conf.API_HOST = 'pili.qiniuapi.com' # 默认
 ```
 
 ### Hub
 
-#### Instantiate a Pili Hub object
+<a id="instantiate-a-pili-hub-object"></a>
+#### 实例化hub对象
 
 ```python
 credentials = Credentials(access_key, secret_key)
 hub = Hub(credentials, hub_name)
 ```
 
-#### Create a new Stream
+<a id="create-a-new-stream"></a>
+#### 创建流
 
 ```python
-# title          : optional, string, auto-generated as default
-# publishKey     : optional, string, auto-generated as default
-# publishSecrity : optional, string, can be "dynamic" or "static", "dynamic" as default
+# title          : 可选，默认自动生成
+# publishKey     : 可选，默认自动生成
+# publishSecrity : 可选, 可以为 "dynamic" 或 "static", 默认为 "dynamic"
 stream = hub.create_stream(title=None, publishKey=None, publishSecurity="static")
 # return stream object...
 print "\ncreate_stream()\n", stream.to_json()
@@ -121,24 +126,24 @@ print "\ncreate_stream()\n", stream.to_json()
 # }
 ```
 
-#### Get a Stream
+<a id="get-an-exist-stream"></a>
+#### 获取流
 
 ```python
-# stream_id: required, string
+# stream_id: 必填，String 类型
 stream = hub.get_stream(stream_id=id)
-# return stream object...
+# 返回直播流对象
 print "\nget_stream()\n", stream
 # <pili.stream.Stream object at 0x106365490>
 ```
 
-#### List Streams
+<a id="list-streams"></a>
+#### 列举流
 
 ```python
-# marker : optional, string
-# limit  : optional, int
-# title  : optional, string
-# status : optional, string, the only acceptable value is "connected"
-# idonly : optional, bool
+# marker : 选填，String 类型
+# limit  : 选填, int 类型
+# title  : 选填, string 类型
 res = hub.list_streams(marker=None, limit=10, title="prefix_")
 for s in res["items"]:
     # s is stream object...
@@ -163,9 +168,10 @@ print "\nlist_streams()\n", res
 # }
 ```
 
-### Stream
-
-#### To JSON string
+<a id="stream"></a>
+### 直播流
+<a id="to-json-string"></a>
+#### 流信息转为json
 
 ```python
 print stream.to_json()
@@ -193,7 +199,8 @@ print stream.to_json()
 # }
 ```
 
-#### Update a Stream
+<a id="update-a-stream"></a>
+#### 更新流
 
 ```python
 # publishKey     : optional, string
@@ -202,19 +209,22 @@ print stream.to_json()
 stream.update(publishKey = "new_secret_words", publishSecurity="dynamic")
 ```
 
-#### Disable a Stream
+<a id="disable-a-stream"></a>
+#### 禁用流
 
 ```python
 stream.disable()
 ```
 
-#### Enable a Stream
+<a id="enable-a-stream"></a>
+#### 启用流
 
 ```python
 stream.enable()
 ```
 
-#### Generate RTMP publish URL
+<a id="generate-rtmp-publish-url"></a>
+#### 生成推流地址
 
 ```python
 url = stream.rtmp_publish_url()
@@ -222,7 +232,8 @@ print url
 # rtmp://e4kvkh.publish.z1.pili.qiniup.com/test-origin/55db52e1e3ba573b2000000e?key=new_secret_words
 ```
 
-#### Generate RTMP live play URLs
+<a id="generate-rtmp-live-play-urls"></a>
+#### 生成rtmp播放地址
 
 ```python
 urls = stream.rtmp_live_urls()
@@ -234,7 +245,8 @@ original_url = urls["ORIGIN"]
 # {"ORIGIN": "rtmp://e4kvkh.live1-rtmp.z1.pili.qiniucdn.com/test-origin/55db52e1e3ba573b2000000e"}
 ```
 
-#### Generate HLS play live URLs
+<a id="generate-hls-play-urls"></a>
+#### 生成hls播放地址
 
 ```python
 urls = stream.hls_live_urls()
@@ -246,7 +258,8 @@ original_url = urls["ORIGIN"]
 # {"ORIGIN": "http://e4kvkh.live1-http.z1.pili.qiniucdn.com/test-origin/55db52e1e3ba573b2000000e.m3u8"}
 ```
 
-#### Generate Http-Flv live play URLs
+<a id="generate-http-flv-live-play-urls"></a>
+#### 生成flv播放地址
 
 ```python
 urls = stream.http_flv_live_urls()
@@ -258,7 +271,8 @@ original_url = urls["ORIGIN"]
 # {"ORIGIN": "http://e4kvkh.live1-http.z1.pili.qiniucdn.com/test-origin/55db52e1e3ba573b2000000e.flv"}
 ```
 
-#### Get Stream status
+<a id="get-stream-status"></a>
+#### 获取流状态
 
 ```python
 status = stream.status()
@@ -267,7 +281,7 @@ print status
 #     "addr": "222.73.202.226:2572",
 #     "status": "connected",
 #     "bytesPerSecond": 16870.200000000001,
-#     "framesPerSecond": {
+#     "framesPerSecond": { 
 #         "audio": 42.200000000000003,
 #         "video": 14.733333333333333,
 #         "data": 0.066666666666666666,
@@ -275,13 +289,14 @@ print status
 # }
 ```
 
-#### Get Stream segments
+<a id="get-stream-segments"></a>
+#### 获取流片段
 
 ```python
-# start_second : optional, int64, in second, unix timestamp
-# end_second   : optional, int64, in second, unix timestamp
-# limit        : optional, uint32
-# ...but you must provide both or none of the arguments.
+# start_second : 选填, int64, 单位为秒, 为UNIX时间戳
+# end_second   : 选填, int64, 单位为秒, 为UNIX时间戳
+# limit        : 选填, uint32
+# ...注意：如上时间参数，要么都传参，要么都传None
 segments = stream.segments(start_second=None, end_second=None, limit=None)
 print segments
 # [
@@ -297,11 +312,12 @@ print segments
 # ]
 ```
 
-#### Generate HLS playback URLs
+<a id="generate-hls-playback-urls"></a>
+#### 生成hls回看地址
 
 ```python
-# start : required, int64, in second, unix timestamp
-# end   : required, int64, in second, unix timestamp
+# start : 必填, int64, 单位为秒, 为UNIX时间戳
+# end   : 必填, int64, 单位为秒, 为UNIX时间戳
 urls = stream.hls_playback_urls(start, end)
 for k in urls:
     print k, ":", urls[k]
@@ -310,15 +326,15 @@ for k in urls:
 original_url = urls["ORIGIN"]
 ```
 
-#### Save Stream as a file
+<a id="save-stream-as-a-file"></a>
+#### 流另存为文件
 
 ```python
-# name      : required, string
-# start     : required, int64, in second, unix timestamp
-# end       : required, int64, in second, unix timestamp
-# format    : optional, string, see http://developer.qiniu.com/docs/v6/api/reference/fop/av/avthumb.html
-# notifyUrl : optional, string
-# pipeline  : optional, string
+# name      : 必填, string 类型
+# format    : 必填, string 类型 更多请参考 http://developer.qiniu.com/docs/v6/api/reference/fop/av/avthumb.html
+# start     : 选填, int64, 单位为秒, 为UNIX时间戳
+# end       : 选填, int64, 单位为秒, 为UNIX时间戳
+# notifyUrl : 选填, string 类型
 res = stream.save_as(name="videoName.mp4", format="mp4", start=1440282134, end=1440437833, notifyUrl=None)
 print res
 # {
@@ -328,13 +344,14 @@ print res
 # }
 ```
 
-#### Snapshot stream
+<a id="snapshot-stream"></a>
+#### 获取快照
 
 ```python
-# name      : required, string
-# format    : required, string see http://developer.qiniu.com/docs/v6/api/reference/fop/av/avthumb.html
-# time      : optional, int64, in second, unix timestamp
-# notifyUrl : optional, string
+# name      : 必填, string 类型
+# format    : 必填, string 类型 更多请参考 http://developer.qiniu.com/docs/v6/api/reference/fop/av/avthumb.html
+# time      : 选填, int64, 单位为秒, 为UNIX时间戳
+# notifyUrl : 选填, string 类型
 res = stream.snapshot(name="imageName.jpg", format="jpg", time=None, notifyUrl=None)
 print res
 # {
@@ -343,11 +360,12 @@ print res
 # }
 ```
 
-While invoking `saveAs()` and `snapshot()`, you can get processing state via Qiniu FOP Service using `persistentId`.  
-API: `curl -D GET http://api.qiniu.com/status/get/prefop?id={PersistentId}`  
-Doc reference: <http://developer.qiniu.com/docs/v6/api/overview/fop/persistent-fop.html#pfop-status>  
+当使用 `saveAs()` 和 `snapshot()` 的时候, 由于是异步处理， 你可以在七牛的FOP接口上使用 `persistentId`来获取处理进度.参考如下：   
+API: `curl -D GET http://api.qiniu.com/status/get/prefop?id={persistentId}`  
+文档说明: <http://developer.qiniu.com/docs/v6/api/overview/fop/persistent-fop.html#pfop-status>  
 
-#### Delete a stream
+<a id="delete-a-stream"></a>
+#### 删除流
 
 ```python
 stream.delete()
@@ -355,10 +373,6 @@ stream.delete()
 
 ## History
 
-- 1.5.8
-    - Add pipeline in saveAs
-- 1.5.7
-    - Use save_as in hls_playback_urls
 - 1.5.0
     - Update Stream Create,Get,List
         - hub.create_stream()
