@@ -24,16 +24,14 @@ def normalize(args, keyword):
 def delete_room(version, roomName):
     url = "http://%s/%s/rooms/%s" % (conf.RTC_API_HOST, version, roomName)
     print(url)
-    req = Request(url=url)
-    req.get_method = lambda: 'DELETE'
-    return req
+    return Request(url=url,method='DELETE')
 
 
 @auth_interface
 def get_room(version, roomName):
     url = "http://%s/%s/rooms/%s" % (conf.RTC_API_HOST, version, roomName)
     print(url)
-    return Request(url=url)
+    return Request(url=url,method='GET')
 
 
 @auth_interface
@@ -44,9 +42,7 @@ def create_room(ownerId, version, roomName=None):
     if bool(roomName):
         params['room_name'] = roomName
     encoded = json.dumps(params)
-    req = Request(url=url, data=encoded)
-    req.get_method = lambda: 'POST'
-    return req
+    return Request(url=url, data=encoded.encode('utf-8'),method='POST')
 
 @auth_interface
 def create_stream(**args):
