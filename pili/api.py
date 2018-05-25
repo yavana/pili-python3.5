@@ -21,27 +21,32 @@ def normalize(args, keyword):
 
 
 @auth_interface
-def delete_room(roomName):
-    url = "http://%s/%s/rooms/%s" % (conf.RTCAPI_HOST, conf.API_VERSION, roomName)
-    return Request(url=url,method='DELETE')
-
-
-
-@auth_interface
-def get_room(roomName):
-    url = "http://%s/%s/rooms/%s" % (conf.RTCAPI_HOST, conf.API_VERSION, roomName)
-    return Request(url=url,method='GET')
+def delete_room(version, roomName):
+    url = "http://%s/%s/rooms/%s" % (conf.RTC_API_HOST, version, roomName)
+    print(url)
+    req = Request(url=url)
+    req.get_method = lambda: 'DELETE'
+    return req
 
 
 @auth_interface
-def create_room(ownerId, roomName=None):
-    params={'owner_id':ownerId}
-    url = "http://%s/%s/rooms" % (conf.RTCAPI_HOST, conf.API_VERSION)
+def get_room(version, roomName):
+    url = "http://%s/%s/rooms/%s" % (conf.RTC_API_HOST, version, roomName)
+    print(url)
+    return Request(url=url)
+
+
+@auth_interface
+def create_room(ownerId, version, roomName=None):
+    params = {'owner_id': ownerId}
+    url = "http://%s/%s/rooms" % (conf.RTC_API_HOST, version)
+    print(url)
     if bool(roomName):
-        params['room_name'] = roomName;
-    encoded = json.dumps(params);
-    return Request(url=url, data=encoded.encode('utf-8'),method='POST')
-
+        params['room_name'] = roomName
+    encoded = json.dumps(params)
+    req = Request(url=url, data=encoded)
+    req.get_method = lambda: 'POST'
+    return req
 
 @auth_interface
 def create_stream(**args):
