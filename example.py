@@ -46,8 +46,8 @@ hub = Hub(credentials, hub_name)
 
 # Get Stream
 # stream_id: required, string
-stream = hub.get_stream('z1.wangliangliang-piliwork.58a3f78720a05d2c1b14bff0')
-print ("\nget_stream()\n", stream.to_json())
+# stream = hub.get_stream('z1.wangliangliang-piliwork.57903e185e77b0372006ebea')
+# print ("\nget_stream()\n", stream.to_json())
 # {
 #   "publishSecurity": "dynamic",
 #   "hub": "test-origin",
@@ -76,7 +76,7 @@ print ("\nget_stream()\n", stream.to_json())
 # marker : optional, string
 # limit  : optional, int
 # title  : optional, string
-print ("\nlist_streams()\n", hub.list_streams())
+# print ("\nlist_streams()\n", hub.list_streams())
 # {
 #   "marker": "10",
 #   "items": [
@@ -124,15 +124,15 @@ print ("\nlist_streams()\n", hub.list_streams())
 # }
 
 # Disable a Stream
-stream.disable()
-print ("\nStream disable()\n", "disabled:", stream.disabled)
+# stream.disable()
+# print ("\nStream disable()\n", "disabled:", stream.disabled)
 
 # Enable a Stream
-stream.enable()
-print ("\nStream enable()\n", "disabled:", stream.disabled)
+# stream.enable()
+# print ("\nStream enable()\n", "disabled:", stream.disabled)
 
 # Get Stream status
-print ("\nStream status()\n", stream.status())
+# print ("\nStream status()\n", stream.status())
 # {
 #     "addr": "222.73.202.226:2572",
 #     "status": "connected",
@@ -145,7 +145,7 @@ print ("\nStream status()\n", stream.status())
 # }
 
 # Generate RTMP publish URL
-print ("\nStream rtmp_publish_url()\n", stream.rtmp_publish_url())
+# print ("\nStream rtmp_publish_url()\n", stream.rtmp_publish_url())
 # rtmp://e4kvkh.publish.z1.pili.qiniup.com/test-origin/55db52e1e3ba573b2000000e?key=new_secret_words
 
 # Generate RTMP live play URLs
