@@ -54,9 +54,7 @@
 ## Installation
 
 ```shell
-pip install pili
-# Note: The interface has changed after version 1.2.
-#       If you need deprecated API, use pip install -v pili==0.1.0.
+python3 setup.py
 ```
 
 ## Usage:

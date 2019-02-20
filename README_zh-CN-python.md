@@ -55,9 +55,7 @@
 ## 安装
 
 ```shell
-pip install pili
-# 提示: 1.2版本以后的接口有变化
-#       若需要使用旧版API, 使用 pip install -v pili==0.1.0.
+python3 setup.py
 ```
 
 <a id="usage"></a>
