@@ -55,7 +55,8 @@
 ## 安装
 
 ```shell
-python3 setup.py
+ python3 setup.py build
+ python3 setup.py install
 ```
 
 <a id="usage"></a>
