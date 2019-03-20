@@ -1,8 +1,11 @@
 from pili import *
+import time
 
-access_key = ""
-secret_key = ""
-hub_name   = "" # The Hub must be exists before use
+start_time = time.time()
+
+access_key = "xAigkPcZNVCWA5ZCuBbQd2e"
+secret_key = "JExQK9sECKMapXwKJf_dSBnOhoD"
+hub_name   = "futurearriving" # The Hub must be exists before use
 
 # Change API host as necessary
 #
@@ -46,8 +49,21 @@ hub = Hub(credentials, hub_name)
 
 # Get Stream
 # stream_id: required, string
-# stream = hub.get_stream('z1.wangliangliang-piliwork.57903e185e77b0372006ebea')
-# print ("\nget_stream()\n", stream.to_json())
+
+stream_list_list = hub.list_streams(liveonly=True)
+print(stream_list_list)
+
+
+stream = hub.get_stream('demo_39_87_AAFTxQVbhSoDAP0U2yjD8VuB')
+res = stream.snapshot(fname="imageName20190320_auto_delete_1_c", format="jpg", time=None, DeleteAfterDays=1, hub_name=hub_name )#deleteAfterDays
+print(res)
+
+
+print(time.time()-start_time)
+
+'''
+stream = hub.get_stream('16_40_2')
+print ("\nget_stream()\n", stream.to_json())
 # {
 #   "publishSecurity": "dynamic",
 #   "hub": "test-origin",
@@ -76,7 +92,7 @@ hub = Hub(credentials, hub_name)
 # marker : optional, string
 # limit  : optional, int
 # title  : optional, string
-# print ("\nlist_streams()\n", hub.list_streams())
+print ("\nlist_streams()\n", hub.list_streams())
 # {
 #   "marker": "10",
 #   "items": [
@@ -124,15 +140,15 @@ hub = Hub(credentials, hub_name)
 # }
 
 # Disable a Stream
-# stream.disable()
-# print ("\nStream disable()\n", "disabled:", stream.disabled)
+stream.disable()
+print ("\nStream disable()\n", "disabled:", stream.disabled)
 
 # Enable a Stream
-# stream.enable()
-# print ("\nStream enable()\n", "disabled:", stream.disabled)
+stream.enable()
+print ("\nStream enable()\n", "disabled:", stream.disabled)
 
 # Get Stream status
-# print ("\nStream status()\n", stream.status())
+print ("\nStream status()\n", stream.status())
 # {
 #     "addr": "222.73.202.226:2572",
 #     "status": "connected",
@@ -145,7 +161,7 @@ hub = Hub(credentials, hub_name)
 # }
 
 # Generate RTMP publish URL
-# print ("\nStream rtmp_publish_url()\n", stream.rtmp_publish_url())
+print ("\nStream rtmp_publish_url()\n", stream.rtmp_publish_url())
 # rtmp://e4kvkh.publish.z1.pili.qiniup.com/test-origin/55db52e1e3ba573b2000000e?key=new_secret_words
 
 # Generate RTMP live play URLs
@@ -211,3 +227,5 @@ hub = Hub(credentials, hub_name)
 
 # Delete a Stream
 # stream.delete()
+
+'''

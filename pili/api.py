@@ -58,12 +58,17 @@ def get_stream(stream_id):
 
 @auth_interface
 def get_stream_list(**args):
-    keyword = ['hub', 'marker', 'limit', 'title', 'status', 'idonly']
+    keyword = ['liveonly', 'marker', 'limit', 'prefix','hub']
+
     args = normalize(args, keyword)
+    hub = ''
+    if args.get('hub'):
+        hub = args.get('hub')
+
     if args.get('idonly'):
         if args['idonly'] is not True:
             del args['idonly']
-    url = "http://%s/%s/streams?" % (conf.API_HOST, conf.API_VERSION)
+    url = "http://%s/%s/hubs/%s/streams?" % (conf.API_HOST, conf.API_VERSION, hub)
     for k, v in args.items():
         url += "&%s=%s" % (k, v)
     req = Request(url=url)
@@ -106,7 +111,26 @@ def save_stream_as(stream_id, **args):
 
 @auth_interface
 def snapshot_stream(stream_id, **args):
-    keyword = ['name', 'format', 'time', 'notifyUrl']
+    '''
+    POST /v2/hubs/<Hub>/streams/<EncodedStreamTitle>/snapshot
+Host: pili.qiniuapi.com
+Authorization: <QiniuToken>
+Content-Type: application/json
+{
+    "fname": "<Fname>",
+    "time": <Time>,
+    "format": "<Format>",
+    "deleteAfterDays": <DeleteAfterDays>
+}
+    :param stream_id:
+    :param args:
+    :return:
+    '''
+    keyword = ['fname', 'format', 'time', 'DeleteAfterDays','hub_name']
     encoded = json.dumps(normalize(args, keyword))
-    url = "http://%s/%s/streams/%s/snapshot" % (conf.API_HOST, conf.API_VERSION, stream_id)
+    hub_name = ''
+    if args.get('hub_name'):
+        hub_name = args.get('hub_name')
+    #url = "http://%s/%s/hubs/%s/streams/%s/snapshot" % (conf.API_HOST, conf.API_VERSION, 'futurearriving','ZGVtb18zOV84N19BQUZUeFFWYmhTb0RBUDBVMnlqRDhWdUI=')
+    url = "http://%s/%s/hubs/%s/streams/%s/snapshot" % (conf.API_HOST, conf.API_VERSION, hub_name, str(base64.urlsafe_b64encode(stream_id.encode('utf8')),'utf8'))
     return Request(url=url, data=encoded.encode('utf-8'))
