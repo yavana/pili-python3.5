@@ -3,8 +3,8 @@ import time
 
 start_time = time.time()
 
-access_key = "xAigkPcZNVCWA5ZCuBbQd2e"
-secret_key = "JExQK9sECKMapXwKJf_dSBnOhoD"
+access_key = ""
+secret_key = ""
 hub_name   = "futurearriving" # The Hub must be exists before use
 
 # Change API host as necessary
@@ -61,9 +61,10 @@ print(res)
 
 print(time.time()-start_time)
 
-'''
-stream = hub.get_stream('16_40_2')
+
+stream = hub.get_stream('demo_39_83_AAFSY2ISQ4EDAP0U2yiN3YUQ')
 print ("\nget_stream()\n", stream.to_json())
+'''
 # {
 #   "publishSecurity": "dynamic",
 #   "hub": "test-origin",

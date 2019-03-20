@@ -30,7 +30,6 @@ def send_and_decode(req):
         except ValueError:
             raise APIError(res.reason)
         else:
-            print(res)
             raise APIError(data["error"])
 
 def __hmac_sha1__(data, key):
